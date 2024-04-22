@@ -1,0 +1,41 @@
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .background {
+            background-image: url('images/bg1.png');
+            background-size: cover;
+            background-position: center;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.5s ease;
+            transform-origin: 48% 58%;
+        }
+
+        #game {
+            position: absolute;
+            top: 650px;
+            left: 870px;
+            width: 800px;
+            height: 448px;
+        }
+
+        .code-input {
+            border: none;
+            outline: none;
+            position: absolute;
+            top: 650px;
+            left: 870px;
+            width: 800px;
+            height: 448px;
+            resize: none;
+            background-color: black;
+            font-size: 16px;
+            color: #b55d4c;
+            z-index: 1000;
+            font-family: 'Courier New', Courier, monospace;
+        }
