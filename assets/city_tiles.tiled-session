@@ -1,0 +1,61 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "map.json",
+    "expandedProjectPaths": [
+        ".",
+        "E:/Projekte/ThisHoodieIs/City Tileset's"
+    ],
+    "fileStates": {
+        "": {
+            "scaleInDock": 2
+        },
+        "Project Mute Tileset V1.tsx": {
+            "scaleInDock": 2,
+            "scaleInEditor": 1
+        },
+        "map.json": {
+            "scale": 0.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 782,
+                "y": 632
+            }
+        },
+        "map.json#coin": {
+            "scaleInDock": 1
+        },
+        "map.json#tiles": {
+            "scaleInDock": 1
+        },
+        "map.tmx": {
+            "scale": 0.8654047619047619,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 862.0243761520896,
+                "y": 347.8141249621702
+            }
+        },
+        "map.tmx#coin": {
+            "scaleInDock": 1
+        },
+        "map.tmx#tiles": {
+            "scaleInDock": 1
+        }
+    },
+    "last.imagePath": "E:/Projekte/ThisHoodieIs/City Tileset's/City Tileset's",
+    "map.fixedSize": false,
+    "openFiles": [
+        "map.json",
+        "map.tmx"
+    ],
+    "project": "city_tiles.tiled-project",
+    "recentFiles": [
+        "map.tmx",
+        "map.json",
+        "Project Mute Tileset V1.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx"
+}
