@@ -7,7 +7,7 @@
         }
 
         .background {
-            background-image: url('images/bg1.png');
+            background-image: url('images/bg2.png');
             background-size: cover;
             background-position: center;
             width: 100%;
@@ -18,7 +18,7 @@
 
         #game {
             position: absolute;
-            top: 650px;
+            top: 450px;
             left: 870px;
             width: 800px;
             height: 448px;
@@ -28,7 +28,7 @@
             border: none;
             outline: none;
             position: absolute;
-            top: 650px;
+            top: 450px;
             left: 870px;
             width: 800px;
             height: 448px;

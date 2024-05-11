@@ -32,14 +32,19 @@ function startPhaserGame() {
     gameProcessed = false;
     var startTimer; // Variable für den Start-Countdown
     var startTimerText; // Text-Element für die Anzeige des Start-Countdowns
+    var maxCoins = 20; // Maximale Anzahl von Münzen
 
     function preload() {
+        // Rauchtextur laden
+        this.load.image('smoke', 'assets/smoke.png');
         this.load.image('coin', 'assets/hoodie2.png');
-        this.load.image('background', 'assets/bg_448x7000_pxl.png');
+        this.load.image('background', 'assets/bg_448x9000_pxl.png');
         //this.load.atlas('player', 'assets/player.png', 'assets/player.json');
         this.load.image('coinParticle', 'assets/hoodie2.png');
-        this.load.spritesheet('player', 'assets/female_run.png', { frameWidth: 64, frameHeight: 64 });
+        this.load.spritesheet('player', 'assets/Run3.png', { frameWidth: 64, frameHeight: 64 });
         this.load.image('example', 'assets/hoodie2.png');
+
+
 
     }
 
@@ -62,13 +67,24 @@ function startPhaserGame() {
         this.add.image(0, 0, 'background').setOrigin(0, 0);
 
         // Setze die Grenzen der Kamera
-        this.physics.world.setBounds(0, 0, 7200, 448); // Ersetzen Sie 600x2000 durch die tatsächliche Größe Ihres Hintergrundbildes
-        this.cameras.main.setBounds(0, 0, 7200, 448); // Ersetzen Sie 2000x2000 durch die tatsächliche Größe Ihres Hintergrundbildes
+        this.physics.world.setBounds(0, 0, 9000, 448); // Ersetzen Sie 600x2000 durch die tatsächliche Größe Ihres Hintergrundbildes
+        this.cameras.main.setBounds(0, 0, 9000, 448); // Ersetzen Sie 2000x2000 durch die tatsächliche Größe Ihres Hintergrundbildes
 
         // Spieler erstellen
         player = this.physics.add.sprite(100, 200, 'player');
         player.setCollideWorldBounds(true);
         player.body.setGravityY(1000); // nur auf den Spieler anwenden
+
+        // Initialisiere das Gitter für die Münzenplatzierung
+        const coinSize = 32;
+        const gridSize = coinSize * 2;
+        const cols = Math.floor(9000 / gridSize); // 9000 ist die Breite deines Spielfeldes
+        const rows = Math.floor(448 / gridSize); // 448 ist die Höhe deines Spielfeldes
+        let grid = Array.from({ length: cols }, () => Array(rows).fill(false));
+
+        // Platzierung der Münzen
+        placeCoins.call(this, grid, cols, rows, gridSize);
+
 
         this.anims.create({
             key: 'walk',
@@ -87,8 +103,10 @@ function startPhaserGame() {
         this.cameras.main.startFollow(player, true);
 
         // Grenzen für die Münzen setzen
-        var maxCoins = 10; // Maximale Anzahl von Münzen
-        var maxX = 5000; // Maximale X-Koordinate, abhängig von der Spielfeldbreite
+        /*
+        var maxCoins = 20; // Maximale Anzahl von Münzen
+        
+        var maxX = 7000; // Maximale X-Koordinate, abhängig von der Spielfeldbreite
         var maxY = 400; // Maximale Y-Koordinate, abhängig von der Spielfeldhöhe
 
         // Erzeuge zufällige Positionen und füge Coins hinzu
@@ -110,6 +128,7 @@ function startPhaserGame() {
             });
 
         }
+        
 
         var coin2 = this.physics.add.sprite(500, 500, 'coin');
 
@@ -120,9 +139,9 @@ function startPhaserGame() {
         // Deaktiviere die Schwerkraft spezifisch für diese Münze
         //coin.body.setGravityY(0);
         coin2.body.setGravityY(0);
-
+*/
         cursors = this.input.keyboard.createCursorKeys();
-        text = this.add.text(20, 20, 'Kleidungsstücke: 0', {
+        text = this.add.text(20, 20, 'Hoodies: 0', {
             fontSize: '20px',
             fill: '#ffffff'
         });
@@ -154,7 +173,7 @@ function startPhaserGame() {
 
 
         // Endzone erstellen
-        let endZone = this.physics.add.sprite(6800, 256, null);
+        let endZone = this.physics.add.sprite(8500, 256, null);
         endZone.setSize(20, 512, true); // Setzt die Größe der Endzone
         endZone.visible = false; // Macht die Endzone unsichtbar
 
@@ -162,7 +181,7 @@ function startPhaserGame() {
         this.physics.add.overlap(player, endZone, reachEnd, null, this);
 
         // preEndzone erstellen
-        let preEndZone = this.physics.add.sprite(6200, 256, null);
+        let preEndZone = this.physics.add.sprite(8200, 256, null);
         preEndZone.setSize(20, 512, true); // Setzt die Größe der Endzone
         preEndZone.visible = false; // Macht die Endzone unsichtbar
 
@@ -186,6 +205,23 @@ function startPhaserGame() {
             loop: true
         });
 
+
+        // Partikel-Emitter für Rauch erstellen
+        this.smokeEmitter = this.add.particles('smoke').createEmitter({
+            x: 400, // X-Position des Emitters
+            y: 200, // Y-Position des Emitters
+            speed: { min: -50, max: 50 }, // Geschwindigkeit der Partikel
+            angle: { min: 0, max: 360 }, // Ausbreitungswinkel
+            scale: { start: 0.5, end: 0 }, // Anfangs- und Endskalierung
+            lifespan: 1000, // Lebensdauer der Partikel in Millisekunden
+            blendMode: 'ADD', // Mischmodus für die Darstellung
+            frequency: 1, // Häufigkeit der Partikel-Emission
+            quantity: 1, // Anzahl der Partikel pro Emission
+            alpha: { start: 1, end: 0 }, // Anfangs- und Endtransparenz
+            gravityY: -50 // Vertikale Schwerkraft
+        });
+        // Rauch-Emitter starten
+        this.smokeEmitter.start();
 
 
 
@@ -233,11 +269,46 @@ function startPhaserGame() {
     }
 
 
+    // Definiere eine Liste von verschiedenen Texten
+    var randomTexts = [
+        "Stylisch!",
+        "Schön!",
+        "Wow!"
+    ];
+
+
+
+
+
+
     function collectCoin(player, coin) {
         //coin.disableBody(true, true);
         coin.destroy(); // Münze entfernen
         score++;
-        text.setText('Kleidungsstücke: ' + score);
+        text.setText('Hoodies: ' + score);
+
+        // Zufälligen Text auswählen
+        var randomIndex = Phaser.Math.Between(0, randomTexts.length - 1);
+        var randomText = randomTexts[randomIndex];
+
+        // Text anzeigen, wenn ein Coin eingesammelt wurde
+        var collectedText = scene.add.text(coin.x, coin.y, randomText, {
+            fontSize: '50px',
+            fill: '#ffffff',
+            align: 'center'
+        }).setOrigin(0.5);
+
+        // Den Text nach einer kurzen Zeit ausblenden und dann zerstören
+        scene.tweens.add({
+            targets: collectedText,
+            alpha: 0,
+            duration: 1000,
+            delay: 500,
+            onComplete: function () {
+                collectedText.destroy();
+            }
+        });
+
     }
 
     // Funktion, die aufgerufen wird, wenn der Spieler die Endzone erreicht
@@ -278,6 +349,36 @@ function startPhaserGame() {
         // Hier können Sie den Code hinzufügen, der ausgeführt werden soll, wenn der Spieler die Endzone erreicht
         debugText.setText("PreEndzone erreicht!");
         gamePreEnd = true;
+    }
+
+    function placeCoins(grid, cols, rows, gridSize) {
+        let placedCoins = 0;
+        while (placedCoins < maxCoins) {
+            let col = Phaser.Math.Between(0, cols - 1);
+            let row = Phaser.Math.Between(0, rows - 1);
+    
+            if (!grid[col][row]) {
+                let x = col * gridSize + gridSize / 2;
+                let y = row * gridSize + gridSize / 2;
+                let coin = this.physics.add.sprite(x, y, 'coin').setGravityY(0);
+                this.physics.add.overlap(player, coin, collectCoin, null, this);
+    
+                this.tweens.add({
+                    targets: coin,
+                    scaleX: 1.1,
+                    scaleY: 1.1,
+                    yoyo: true,
+                    repeat: -1,
+                    ease: 'Sine.easeInOut',
+                    duration: 500
+                });
+    
+                grid[col][row] = true;
+                placedCoins++;
+            }
+           // console.log(`Placing coin at (${x}, ${y}) in grid cell (${col}, ${row})`);
+        }
+        
     }
 
 }
