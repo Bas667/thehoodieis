@@ -9,7 +9,7 @@ function startPhaserGame() {
             default: 'arcade',
             arcade: {
                 gravity: { y: 0 },
-                debug: true
+                debug: false
             }
         },
         scene: {
@@ -331,7 +331,7 @@ function startPhaserGame() {
             // Transparenz der Box einstellen
             box.setAlpha(0.7);
 
-            var gameOverText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, 'Herzlichen Glückwunsch! Du hast ' + score + ' Hoodies gesammelt!\n\nAber warum eigentlich?\n Niemand hat dir gesagt, dass du Hoodies sammeln sollst.\n\nFast Fashion verführt uns dazu, mehr zu kaufen, als wir brauchen.\n Sie hinterlässt nicht nur einen riesigen Müllberg, sondern auch Spuren\n auf unserem Planeten. Stell dir vor, Kleidung könnte nachhaltig, \n langlebig, fair produziert und umweltfreundlich sein.\n\n Es ist Zeit für eine Veränderung.\n Informiere dich und entdecke nachhaltige Alternativen hier:\n\nwww.kokolor-clothing.de :)', {
+            var gameOverText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, 'Herzlichen Glückwunsch! Du hast ' + score + ' Hoodies gesammelt!\n\nAber warum eigentlich?\n Niemand hat dir gesagt, dass du Hoodies sammeln sollst.\n\nFast Fashion verführt uns dazu, mehr zu kaufen, als wir brauchen.\n Stell dir vor, Kleidung könnte nachhaltig,\n langlebig, fair produziert und umweltfreundlich sein.\n\n Es ist Zeit für eine Veränderung.\n Informiere dich und entdecke nachhaltige Alternativen hier:\n\nwww.kokolor-clothing.de :)', {
                 fontSize: '16px',
                 fill: '#ffffff',
                 align: 'center'
