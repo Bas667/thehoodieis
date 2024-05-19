@@ -41,7 +41,7 @@ function startPhaserGame() {
         this.load.image('background', 'assets/bg_448x9000_pxl.png');
         //this.load.atlas('player', 'assets/player.png', 'assets/player.json');
         this.load.image('coinParticle', 'assets/hoodie2.png');
-        this.load.spritesheet('player', 'assets/Run3.png', { frameWidth: 64, frameHeight: 64 });
+        this.load.spritesheet('player', 'assets/Biker_run_72_pxl.png', { frameWidth: 72, frameHeight: 72 });
         this.load.image('example', 'assets/hoodie2.png');
 
 
@@ -77,7 +77,7 @@ function startPhaserGame() {
 
         // Initialisiere das Gitter für die Münzenplatzierung
         const coinSize = 32;
-        const gridSize = coinSize * 2;
+        const gridSize = coinSize * 3;
         const cols = Math.floor(9000 / gridSize); // 9000 ist die Breite deines Spielfeldes
         const rows = Math.floor(448 / gridSize); // 448 ist die Höhe deines Spielfeldes
         let grid = Array.from({ length: cols }, () => Array(rows).fill(false));
@@ -173,7 +173,7 @@ function startPhaserGame() {
 
 
         // Endzone erstellen
-        let endZone = this.physics.add.sprite(8500, 256, null);
+        let endZone = this.physics.add.sprite(8600, 256, null);
         endZone.setSize(20, 512, true); // Setzt die Größe der Endzone
         endZone.visible = false; // Macht die Endzone unsichtbar
 
@@ -205,7 +205,7 @@ function startPhaserGame() {
             loop: true
         });
 
-
+/*
         // Partikel-Emitter für Rauch erstellen
         this.smokeEmitter = this.add.particles('smoke').createEmitter({
             x: 400, // X-Position des Emitters
@@ -222,7 +222,7 @@ function startPhaserGame() {
         });
         // Rauch-Emitter starten
         this.smokeEmitter.start();
-
+*/
 
 
         scene = this;
@@ -339,8 +339,8 @@ function startPhaserGame() {
             gameOverText.setScrollFactor(0);
             gameOverText.setDepth(10);
 
-            // this.coinEmitter.on = true; // Aktiviere den Emitter
-            // this.coinEmitter.emittedParticles
+             this.coinEmitter.on = true; // Aktiviere den Emitter
+             this.coinEmitter.emittedParticles
         }
 
     }
@@ -353,28 +353,39 @@ function startPhaserGame() {
 
     function placeCoins(grid, cols, rows, gridSize) {
         let placedCoins = 0;
-        while (placedCoins < maxCoins) {
-            let col = Phaser.Math.Between(0, cols - 1);
-            let row = Phaser.Math.Between(0, rows - 1);
-    
-            if (!grid[col][row]) {
-                let x = col * gridSize + gridSize / 2;
-                let y = row * gridSize + gridSize / 2;
-                let coin = this.physics.add.sprite(x, y, 'coin').setGravityY(0);
-                this.physics.add.overlap(player, coin, collectCoin, null, this);
-    
-                this.tweens.add({
-                    targets: coin,
-                    scaleX: 1.1,
-                    scaleY: 1.1,
-                    yoyo: true,
-                    repeat: -1,
-                    ease: 'Sine.easeInOut',
-                    duration: 500
-                });
-    
-                grid[col][row] = true;
-                placedCoins++;
+    const minX = 500;
+    const maxX = 9000 - 1000; // 9000 ist die Breite des Spielfeldes abzüglich 200
+
+    while (placedCoins < maxCoins) {
+        let col = Phaser.Math.Between(0, cols - 1);
+        let row = Phaser.Math.Between(0, rows - 1);
+
+        if (!grid[col][row]) {
+            let x = col * gridSize + gridSize / 2;
+
+            // Sicherstellen, dass die X-Position zwischen 200 und maxX-200 liegt
+            if (x < minX) {
+                x = minX + Phaser.Math.Between(0, gridSize / 2);
+            } else if (x > maxX) {
+                x = maxX - Phaser.Math.Between(0, gridSize / 2);
+            }
+
+            let y = row * gridSize + gridSize / 2;
+            let coin = this.physics.add.sprite(x, y, 'coin').setGravityY(0);
+            this.physics.add.overlap(player, coin, collectCoin, null, this);
+
+            this.tweens.add({
+                targets: coin,
+                scaleX: 1.1,
+                scaleY: 1.1,
+                yoyo: true,
+                repeat: -1,
+                ease: 'Sine.easeInOut',
+                duration: 500
+            });
+
+            grid[col][row] = true;
+            placedCoins++;
             }
            // console.log(`Placing coin at (${x}, ${y}) in grid cell (${col}, ${row})`);
         }
