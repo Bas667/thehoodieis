@@ -143,8 +143,10 @@ function startPhaserGame() {
         cursors = this.input.keyboard.createCursorKeys();
         text = this.add.text(20, 20, 'Hoodies: 0', {
             fontSize: '20px',
+            stroke: '#000000',  // Farbe der Kontur
+            strokeThickness: 2,  // Dicke der Kontur
             fill: '#ffffff'
-        });
+        });  
         text.setScrollFactor(0);
         text.setOrigin(0, 0.5); // Setzt den Ursprungspunkt auf die linke Mitte
 
@@ -273,6 +275,10 @@ function startPhaserGame() {
     var randomTexts = [
         "Stylisch!",
         "Schön!",
+        "Nice!",
+        "Chic",
+        "Awesome!",
+        "Cool!",
         "Wow!"
     ];
 
